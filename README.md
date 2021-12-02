@@ -1,14 +1,14 @@
 # plonky
 a Perl program to generate a conky rc file 
 
-##Requirements
+## Requirements
 = Linux
 = conky
 = Perl
 
-##Usage
+## Usage
 In a terminal in $home, execute:
-perl plonky.pl > .conkyrc
+`perl plonky.pl > .conkyrc`
 
 Then run 
-conky -d -b 
+`conky -d -b` 
