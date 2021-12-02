@@ -1,5 +1,7 @@
 # plonky
-a Perl program to generate a conky rc file 
+A Perl program to generate a conky rc file.
+
+What is conky? See: https://github.com/brndnmtthws/conky
 
 ## Requirements
 = Linux
