@@ -137,10 +137,12 @@ push @aTXT, "\$stippled_hr";
 push @aTXT, "\$sysname \$kernel ★ \$machine";
 push @aTXT, "Uptime: \$uptime";
 push @aTXT, "Processes: \$processes (\$running_processes)"; 
-push @aTXT, "\${freq}MHz";
+push @aTXT, "/fs/file-nr: \${execi 5 cat /proc/sys/fs/file-nr | cut -f 1} CPUfreq: \${color yellow}\${freq} \${color lightgrey}MHz";
+push @aTXT, "\$stippled_hr";
 
 for my $cpu (0..$iCpuCount-1){ 
-	push @aTXT, "\${color lightgrey}Core $cpu:\${color yellow} \${cpu cpu$cpu}\%";
+	my $cpuHN=$cpu+1;
+	push @aTXT, "\${color lightgrey}Core $cpuHN:\${color yellow} \${cpu cpu$cpu}\%";
 	push @aTXT, "\${cpubar cpu$cpu 25 100}";
 	push @aTXT, "\${color black}\${cpugraph cpu$cpu 000000 5000a0}";
 }
@@ -148,31 +150,35 @@ push @aTXT, "\${color lightgrey}";
 push @aTXT, "\$stippled_hr";
 
 
+my %dIFs=();
 for my $IFL (@aIFnyms) {
 	
  push @aTXT, "\${color lightgrey}";
  my @aFLpcs=split(/ /,$IFL);
  my $nic=$aFLpcs[2];
- push @aTXT, "◉ $nic \${addr $nic}";	
- push @aTXT, "▼: \${downspeed $nic} k/s ▲: \${upspeed $nic} k/s"; 
- push @aTXT, "∑▼: \${totaldown $nic} ∑▲: \${totalup $nic}";
- push @aTXT, "▼ \${downspeedgraph $nic 16,150} ▲ \${upspeedgraph $nic 16,150}";
-	
+	if( ! exists $dIFs{$nic} ) {
+	 $dIFs{$nic}=1;
+	 push @aTXT, "◉ $nic \${addr $nic}";	
+	 push @aTXT, "▼: \${downspeed $nic} k/s ▲: \${upspeed $nic} k/s"; 
+	 push @aTXT, "∑▼: \${totaldown $nic} ∑▲: \${totalup $nic}";
+	 push @aTXT, "▼ \${downspeedgraph $nic 16,150} ▲ \${upspeedgraph $nic 16,150}";
+	}
+	else { $dIFs{$nic}++; }
 }
 
-
-push @aTXT, "◉\${color lightgrey}Swap: \$swap/\$swapmax - \$swapperc% \${swapbar}";
-push @aTXT, "◉\${color grey}FSuser: \${fs_used /home}/\${fs_size /home} - \${fs_used_perc /home}% \${fs_bar /home}";
-push @aTXT, "◉\${color lightgrey}RAM: \$mem/\$memmax - \$memperc% \$membar";
 push @aTXT, "\$stippled_hr";
-push @aTXT, "Process     ★      PID  ★  CPU ★  RAM";
+push @aTXT, "◉ \${color lightgrey}Swap: \$swap/\$swapmax - \$swapperc% \${swapbar}";
+push @aTXT, "◉ \${color grey}FSuser: \${fs_used /home}/\${fs_size /home} - \${fs_used_perc /home}% \${fs_bar /home}";
+push @aTXT, "◉ \${color lightgrey}RAM: \$mem/\$memmax - \$memperc% \$membar";
+push @aTXT, "\$stippled_hr";
+push @aTXT, "Process     ★       PID  ★  CPU ★  RAM";
  
 for my $proc (1..10){
 
  my $bullet="◎"; 
  my $colr="lightgrey";
  if($proc==1) { $bullet="◉"; $colr="yellow";} 
- push @aTXT, "$bullet\${color $colr}\${top name $proc} \${top pid $proc} \${top cpu $proc} \${top mem $proc}";
+ push @aTXT, "\${color $colr}$bullet \${top name $proc} \${top pid $proc} \${top cpu $proc} \${top mem $proc}";
 
 }
 
