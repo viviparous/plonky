@@ -17,8 +17,12 @@ In a terminal in $home, execute:
 Then run 
     `conky -d -b` 
 
-## Example
+## Screen Captures
 
-Don't laugh at the CPU. ^_^
+Raspberry Pi 400:
 
-![example01](https://github.com/viviparous/plonky/blob/main/screenshot-01-vmware.jpg)
+![example01](https://github.com/viviparous/plonky/blob/main/screenshot-02-rpi400.jpg)
+
+Venerable Thinkpad:
+
+![example02](https://github.com/viviparous/plonky/blob/main/screenshot-01-vmware.jpg)
