@@ -116,12 +116,16 @@ push @aCFG, qq/show_graph_scale = false,/;
 push @aCFG, qq/show_graph_range = false,/;
 push @aCFG,	qq/override_utf8_locale = true/;    
 
-
+# # # Check architecture. If not X86, try different cpuinfo keys. 
 my $iCpuCount=qx{cat /proc/cpuinfo | grep vendor_id | wc -l}; chomp($iCpuCount);
-my $sCpuNym=qx{cat /proc/cpuinfo | grep 'model name' | sort -u}; chomp($sCpuNym);
+my $sCpuNym=qx{cat /proc/cpuinfo | grep 'model name' | sort -u | cut -d: -f 2}; chomp($sCpuNym);
 
-my @aNymPcs=split(/:/,$sCpuNym);
-$sCpuNym=$aNymPcs[1];
+
+# if ARM, count "processor" keys; also "Hardware" key and "Model" key
+if ($iCpuCount==0){ 
+	$iCpuCount=qx{cat /proc/cpuinfo | grep -P "^processor\\s+"  | wc -l}; chomp($iCpuCount);
+	$sCpuNym=qx{cat /proc/cpuinfo | grep -P "^Model\\s+" | sort -u | cut -d: -f 2}; chomp($sCpuNym);
+}
 
 
 my $sIFs=qx{ip route | grep -E "^[0-9]"}; chomp($sIFs);
