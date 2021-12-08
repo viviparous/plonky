@@ -8,7 +8,9 @@ What is conky? See: https://github.com/brndnmtthws/conky
 * conky
 * Perl
 
-Note: For ChromeOS with Crostini, enable window decorations in .conkyrc so that conky draws a title bar. 
+### Notes 
+* lsof is used for displaying network connexions. lsof is a common Linux utility.
+* For ChromeOS with Crostini, enable window decorations in .conkyrc so that conky draws a title bar. 
 
 ## Usage
 In a terminal in $home, execute:

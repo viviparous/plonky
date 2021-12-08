@@ -152,6 +152,25 @@ for my $cpu (0..$iCpuCount-1){
 }
 push @aTXT, "\${color lightgrey}";
 push @aTXT, "\$stippled_hr";
+push @aTXT, "Process     ★       PID  ★  CPU ★  RAM";
+ 
+for my $proc (1..10){
+
+ my $bullet="◎"; 
+ my $colr="lightgrey";
+ if($proc==1) { $bullet="◉"; $colr="yellow";} 
+ push @aTXT, "\${color $colr}$bullet \${top name $proc} \${top pid $proc} \${top cpu $proc} \${top mem $proc}";
+
+}
+
+
+push @aTXT, "\$stippled_hr";
+
+push @aTXT, "◉ \${color lightgrey}Swap: \$swap/\$swapmax - \$swapperc% \${swapbar}";
+push @aTXT, "◉ \${color grey}FSuser: \${fs_used /home}/\${fs_size /home} - \${fs_used_perc /home}% \${fs_bar /home}";
+push @aTXT, "◉ \${color lightgrey}RAM: \$mem/\$memmax - \$memperc% \$membar";
+push @aTXT, "\$stippled_hr";
+push @aTXT, "\$stippled_hr";
 
 
 my %dIFs=();
@@ -169,23 +188,11 @@ for my $IFL (@aIFnyms) {
 	}
 	else { $dIFs{$nic}++; }
 }
-
 push @aTXT, "\$stippled_hr";
-push @aTXT, "◉ \${color lightgrey}Swap: \$swap/\$swapmax - \$swapperc% \${swapbar}";
-push @aTXT, "◉ \${color grey}FSuser: \${fs_used /home}/\${fs_size /home} - \${fs_used_perc /home}% \${fs_bar /home}";
-push @aTXT, "◉ \${color lightgrey}RAM: \$mem/\$memmax - \$memperc% \$membar";
-push @aTXT, "\$stippled_hr";
-push @aTXT, "Process     ★       PID  ★  CPU ★  RAM";
- 
-for my $proc (1..10){
 
- my $bullet="◎"; 
- my $colr="lightgrey";
- if($proc==1) { $bullet="◉"; $colr="yellow";} 
- push @aTXT, "\${color $colr}$bullet \${top name $proc} \${top pid $proc} \${top cpu $proc} \${top mem $proc}";
 
-}
 
+push @aTXT, "\${execi 10 lsof -i -n -P | awk '{split(\$9,a,\">\"); print \$1,\$8,a[2]}' | awk '(NF==3){print \$0}' | sort | uniq -c | sort -Vr -k1,1 -k4,4 | sed 's/  //g' }";
 
 say join("\n",@aCmts);
 
