@@ -1,5 +1,5 @@
 # plonky
-A Perl program to generate a conky rc file. 
+A Perl program to generate a conky rc file for a fast admin/dev configuration. 
 
 What is conky? See: https://github.com/brndnmtthws/conky
 
@@ -21,10 +21,15 @@ Then run
 
 ## Screen Captures
 
+Network connections are summarised:
+
+![example01](https://github.com/viviparous/plonky/blob/main/screenshot-03-netconns.jpg)
+
+
 Raspberry Pi 400:
 
-![example01](https://github.com/viviparous/plonky/blob/main/screenshot-02-rpi400.jpg)
+![example02](https://github.com/viviparous/plonky/blob/main/screenshot-02-rpi400.jpg)
 
-Venerable Thinkpad:
+Venerable Thinkpad with VMware virtual adaptors:
 
-![example02](https://github.com/viviparous/plonky/blob/main/screenshot-01-vmware.jpg)
+![example03](https://github.com/viviparous/plonky/blob/main/screenshot-01-vmware.jpg)

@@ -190,7 +190,9 @@ for my $IFL (@aIFnyms) {
 }
 push @aTXT, "\$stippled_hr";
 
+push @aTXT, "\${execi 10 lsof -i -n -P | grep \"\\-\>\" | awk '{a[\$1\"_p\"\$2]++;}END{ for (it in a){print it,a[it]}}' | sort -nr -k2,2 }";
 
+push @aTXT, "\$stippled_hr";
 
 push @aTXT, "\${execi 10 lsof -i -n -P | awk '{split(\$9,a,\">\"); print \$1,\$8,a[2]}' | awk '(NF==3){print \$0}' | sort | uniq -c | sort -Vr -k1,1 -k4,4 | sed 's/  //g' }";
 
