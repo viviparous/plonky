@@ -144,11 +144,12 @@ push @aTXT, "Processes: \$processes (\$running_processes)";
 push @aTXT, "/fs/file-nr: \${execi 5 cat /proc/sys/fs/file-nr | cut -f 1} CPUfreq: \${color yellow}\${freq} \${color lightgrey}MHz";
 push @aTXT, "\$stippled_hr";
 
+push @aTXT, "\${color black}\${cpugraph -l 5000a0 f000a0}";
+
 for my $cpu (0..$iCpuCount-1){ 
 	my $cpuHN=$cpu+1;
 	push @aTXT, "\${color lightgrey}Core $cpuHN:\${color yellow} \${cpu cpu$cpu}\%";
 	push @aTXT, "\${cpubar cpu$cpu 25 100}";
-	push @aTXT, "\${color black}\${cpugraph cpu$cpu 000000 5000a0}";
 }
 push @aTXT, "\${color lightgrey}";
 push @aTXT, "\$stippled_hr";
@@ -190,11 +191,15 @@ for my $IFL (@aIFnyms) {
 }
 push @aTXT, "\$stippled_hr";
 
-push @aTXT, "\${execi 10 lsof -i -n -P | grep \"\\-\>\" | awk '{a[\$1\"_p\"\$2]++;}END{ for (it in a){print it,a[it]}}' | sort -nr -k2,2 }";
+push @aTXT, qq#\${execi 5 lsof -i -n -P | grep "\\-\>" | awk '{a[\$1"_p"\$2]++;}END{ for (it in a){print it,a[it]}}' | sort -nr -k2,2 }#;
 
 push @aTXT, "\$stippled_hr";
 
-push @aTXT, "\${execi 10 lsof -i -n -P | awk '{split(\$9,a,\">\"); print \$1,\$8,a[2]}' | awk '(NF==3){print \$0}' | sort | uniq -c | sort -Vr -k1,1 -k4,4 | sed 's/  //g' }";
+push @aTXT, qq#\${execi 5 lsof -i -n -P | tail -n +2 | awk -F: '{split(\$NF,ap," ");print ap[1];}' | sort -n | uniq -c | sort -nr | awk '{printf \$2"="\$1" "}' | fmt -w 40 }#;
+
+push @aTXT, "\$stippled_hr";
+
+push @aTXT, qq#\${execi 10 lsof -i -n -P | awk '{split(\$9,a,">"); print \$1,\$8,a[2]}' | awk '(NF==3){print \$0}' | sort | uniq -c | sort -Vr -k1,1 -k4,4 | sed 's/  //g' }#;
 
 say join("\n",@aCmts);
 
