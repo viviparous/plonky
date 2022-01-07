@@ -146,10 +146,12 @@ push @aTXT, "\$stippled_hr";
 
 push @aTXT, "\${color black}\${cpugraph -l 5000a0 f000a0}";
 
+my $ih=25;
+if($iCpuCount > 5){ $ih=13; }
 for my $cpu (0..$iCpuCount-1){ 
 	my $cpuHN=$cpu+1;
 	push @aTXT, "\${color lightgrey}Core $cpuHN:\${color yellow} \${cpu cpu$cpu}\%";
-	push @aTXT, "\${cpubar cpu$cpu 25 100}";
+	push @aTXT, "\${cpubar cpu$cpu $ih 100}";
 }
 push @aTXT, "\${color lightgrey}";
 push @aTXT, "\$stippled_hr";
