@@ -82,15 +82,22 @@ $oCONKY->addKV("conky.text", \@aTXT);
 
 # # # Check architecture. If not X86, try different cpuinfo keys. 
 my @aCPUTypes=("UNK", "Intel","AMD","0x41", "Raspberry Pi 4"); #UNK = unknown ; 0x41 is ARM
-my %dARCHVals=( cputype => $aCPUTypes[0] , wmtype => -1); #wmtype window manager
+my %dARCHVals=( cputype => $aCPUTypes[0] , wmtype => -1); #wmtype window manager 0=xorg , 1=wayland
 
 # # # Check architecture, window manager. is Xorg or Wayland? 
 my $xdgsesstype=qx{ ps -ef | grep -i xorg | wc -l}; chomp($xdgsesstype); 
-if($xdgsesstype == 1){ $dARCHVals{wmtype} = 0; } #bIsXORG
+if($xdgsesstype > 1){ $dARCHVals{wmtype} = 0; } #bIsXORG
 else { 
 	$xdgsesstype=qx{ ps -ef | grep -i wayland | wc -l}; chomp($xdgsesstype); 
 	if($xdgsesstype > 1){ $dARCHVals{wmtype} = 1; } #bIsWayland
 }
+if($dARCHVals{wmtype}==-1){ #catch
+
+	if( $gdDbg{level}==1 ) { doMsgr( [ $gdDbg{level} , $gdDbg{msg} , __LINE__ , $xdgsesstype , $gdDbg{exp} , -1 , $dARCHVals{wmtype} ]  ); }
+	$dARCHVals{wmtype}=0 ; #default to xorg
+	
+}
+
 
 if( $gdDbg{level}==1 ) { doMsgr( [ $gdDbg{level} , $gdDbg{msg} , __LINE__ , $xdgsesstype , $gdDbg{exp} , 1 , $dARCHVals{wmtype} ]  ); }
 
@@ -207,10 +214,9 @@ for my $proc (1..10){
 
 push @aTXT, "\${color $colrORNG}\$stippled_hr";
 
-push @aTXT, "◉ \${color lightgrey}Swap: \$swap/\$swapmax - \$swapperc% \${swapbar}";
-push @aTXT, "◉ \${color grey}FSuser: \${fs_used /home}/\${fs_size /home} - \${fs_used_perc /home}% \${fs_bar /home}";
-
-push @aTXT, "◉ \${color lightgrey}RAM: \$mem/\$memmax - \$memperc% \${color $colrORNG}\$membar";
+push @aTXT, "\${color $colrORNG}◉ \${color $colrLG}Swap: \$swap/\$swapmax - \$swapperc% \${swapbar}";
+push @aTXT, "\${color $colrORNG}◉ \${color $colrLG}FSuser: \${fs_used /home}/\${fs_size /home} - \${fs_used_perc /home}% \${fs_bar /home}";
+push @aTXT, "\${color $colrORNG}◉ \${color $colrLG}RAM: \$mem/\$memmax - \$memperc% \${color $colrORNG}\$membar";
 push @aTXT, "\$stippled_hr";
 
 push @aTXT, "\${color $colrLG}\$stippled_hr";
